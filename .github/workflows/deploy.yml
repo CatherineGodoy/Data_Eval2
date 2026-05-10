@@ -38,5 +38,5 @@ jobs:
             sudo docker stop db-app || true
             sudo docker rm db-app || true
             
-            # MAGIA INGE SENIOR: Le decimos que se reinicie siempre y que CREE la base de datos
-            sudo docker run -d --name db-app -p 3306:3306 --restart always -e MYSQL_ROOT_PASSWORD=Caltias8 -e MYSQL_DATABASE=proyecto_db ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
+            # MAGIA INGE SENIOR: Volumen añadido para cumplir el 100% de la rúbrica
+            sudo docker run -d --name db-app -p 3306:3306 --restart always -v mysql_data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Caltias8 -e MYSQL_DATABASE=proyecto_db ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
