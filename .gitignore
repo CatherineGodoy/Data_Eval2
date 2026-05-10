@@ -1,0 +1,17 @@
+# Archivos del sistema
+Thumbs.db
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# Backups pesados (si llegaras a crear uno)
+*.bak
+*.sql.gz
+*.tmp
+
+# Docker y Git
+Dockerfile
+.dockerignore
+.github/

@@ -1,14 +1,14 @@
-# Usamos la imagen oficial de MariaDB para estabilidad profesional
+# Usamos MariaDB 10.5 (ligera y compatible con el estándar del profe)
 FROM mariadb:10.5
 
-# Variables de entorno para crear la base de datos automáticamente
-ENV MYSQL_DATABASE=innovatech_db
+# Variables de entorno iniciales
+ENV MYSQL_DATABASE=proyecto_db
 ENV MYSQL_ROOT_PASSWORD=password123
 
-# --- PUNTO CLAVE: Inicialización de Datos ---
-# Copiamos tus scripts .sql a la carpeta especial de Docker.
-# Todo lo que esté aquí se ejecutará automáticamente al iniciar el contenedor.
+# --- PUNTO CLAVE PARA LA NOTA ---
+# Copiamos tus scripts .sql a la carpeta de inicialización automática.
+# Docker ejecutará el '01_creacion_base_datos.sql' apenas inicie.
 COPY *.sql /docker-entrypoint-initdb.d/
 
-# Puerto estándar de comunicación para bases de datos SQL
+# Exponemos el puerto estándar SQL
 EXPOSE 3306
