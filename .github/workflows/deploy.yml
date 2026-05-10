@@ -31,7 +31,6 @@ jobs:
           proxy_username: ec2-user
           proxy_key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Apagamos el MariaDB nativo para liberar el puerto 3306
             sudo systemctl stop mariadb || true
             sudo systemctl stop mysqld || true
             
@@ -39,5 +38,5 @@ jobs:
             sudo docker stop db-app || true
             sudo docker rm db-app || true
             
-            # Levantamos el contenedor con la clave que configuró el equipo
-            sudo docker run -d --name db-app -p 3306:3306 -e MYSQL_ROOT_PASSWORD=Caltias8 ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
+            # MAGIA INGE SENIOR: Le decimos que se reinicie siempre y que CREE la base de datos
+            sudo docker run -d --name db-app -p 3306:3306 --restart always -e MYSQL_ROOT_PASSWORD=Caltias8 -e MYSQL_DATABASE=proyecto_db ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
