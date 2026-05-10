@@ -31,8 +31,13 @@ jobs:
           proxy_username: ec2-user
           proxy_key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            # Apagamos el MariaDB nativo para liberar el puerto 3306
+            sudo systemctl stop mariadb || true
+            sudo systemctl stop mysqld || true
+            
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
             sudo docker stop db-app || true
             sudo docker rm db-app || true
-            # Puerto estándar de MariaDB/MySQL: 3306
-            sudo docker run -d --name db-app -p 3306:3306 ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
+            
+            # Levantamos el contenedor con la clave que configuró el equipo
+            sudo docker run -d --name db-app -p 3306:3306 -e MYSQL_ROOT_PASSWORD=Caltias8 ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
