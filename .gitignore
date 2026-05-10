@@ -1,4 +1,4 @@
-# Archivos del sistema
+# Archivos temporales del sistema
 Thumbs.db
 .DS_Store
 
@@ -6,12 +6,10 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Backups pesados (si llegaras a crear uno)
+# Backups pesados
 *.bak
 *.sql.gz
 *.tmp
 
-# Docker y Git
-Dockerfile
-.dockerignore
-.github/
+# Archivos de ambiente
+.env

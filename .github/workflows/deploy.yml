@@ -1,0 +1,38 @@
+name: Deploy Database Innovatech
+on:
+  push:
+    branches: [ deploy ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push DB Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
+
+      - name: Deploy via Proxy (Jump Host)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          proxy_host: ${{ secrets.EC2_PROXY_HOST }}
+          proxy_username: ec2-user
+          proxy_key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
+            sudo docker stop db-app || true
+            sudo docker rm db-app || true
+            # Puerto estándar de MariaDB/MySQL: 3306
+            sudo docker run -d --name db-app -p 3306:3306 ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
