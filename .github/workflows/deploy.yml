@@ -31,16 +31,12 @@ jobs:
           proxy_username: ec2-user
           proxy_key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo systemctl stop mariadb || true
-            sudo systemctl stop mysqld || true
+            sudo docker stop front-app || true
+            sudo docker rm front-app || true
+            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/innovatech-front:latest || true
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/innovatech-front:latest
             
-            # MAGIA: Borramos el que hicimos a mano para que el robot tome el control
-            sudo docker stop data-app || true
-            sudo docker rm data-app || true
-            
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
-            sudo docker stop db-app || true
-            sudo docker rm db-app || true
-            
-            # Comando final con persistencia y contraseña Caltias8
-            sudo docker run -d --name db-app -p 3306:3306 --restart always -v mysql_data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Caltias8 -e MYSQL_DATABASE=proyecto_db ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
+            # MAGIA: Mapeamos localhost directamente a la IP del Backend
+            sudo docker run -d --name front-app -p 80:5000 \
+              --add-host=localhost:10.0.2.62 \
+              ${{ secrets.DOCKER_USERNAME }}/innovatech-front:latest
