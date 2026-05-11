@@ -1,4 +1,4 @@
-# Innovatech Chile - Database Layer (Equipo Caltías) 📊
+# Innovatech Chile - Database Layer (Equipo Caltías) 📊 
 
 [cite_start]Este componente gestiona la persistencia crítica de los usuarios y estadísticas del sistema Innovatech Chile utilizando MariaDB/MySQL[cite: 26, 60].
 
