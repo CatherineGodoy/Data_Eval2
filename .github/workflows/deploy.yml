@@ -34,9 +34,13 @@ jobs:
             sudo systemctl stop mariadb || true
             sudo systemctl stop mysqld || true
             
+            # MAGIA: Borramos el que hicimos a mano para que el robot tome el control
+            sudo docker stop data-app || true
+            sudo docker rm data-app || true
+            
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
             sudo docker stop db-app || true
             sudo docker rm db-app || true
             
-            # MAGIA INGE SENIOR: Volumen añadido para cumplir el 100% de la rúbrica
+            # Comando final con persistencia y contraseña Caltias8
             sudo docker run -d --name db-app -p 3306:3306 --restart always -v mysql_data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Caltias8 -e MYSQL_DATABASE=proyecto_db ${{ secrets.DOCKER_USERNAME }}/innovatech-db:latest
